@@ -19,14 +19,8 @@ pipeline{
         }
         stage("deploy") {
             steps {
-                sshagent(['tomcat1']) {
-                    sh"""
-                      scp -o StrictHostKeyChecking=no target/webapp.war ec2-user@172.31.83.109:/opt/tomcat/webapps/
-                      ssh ec2-user@172.31.83.109 /opt/tomcat/bin/shutdown.sh
-                      ssh ec2-user@172.31.83.109 /opt/tomcat/bin/startup.sh
-                      
-                    """
-            }    
+                
+              sh "curl -v -u tomcat:s3cret -T /var/lib/jenkins/workspace/Jenkinsfile/webapp/target/webapp.war  'http://ec2-44-202-99-205.compute-1.amazonaws.com:8080//manager/text/deploy?path=/pipeline-maven'" 
         }
     }
   }
