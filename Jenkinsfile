@@ -13,13 +13,10 @@ pipeline{
         stage("maven build") {
             steps{
                 sh "mvn clean package"
-                
-                
             }
         }
         stage("deploy") {
-            steps {
-                
+            steps {            
               sh "curl -v -u tomcat:s3cret -T /var/lib/jenkins/workspace/Jenkinsfile/webapp/target/webapp.war  'http://ec2-44-202-99-205.compute-1.amazonaws.com:8080//manager/text/deploy?path=/pipeline-maven'" 
         }
     }
