@@ -1,0 +1,25 @@
+pipeline {
+    agent any
+    environment{
+        PATH = "/opt/maven/bin:$PATH"
+    }
+    stages {
+        stage("Git Checkout"){
+            steps{
+                //Pulling code from repo
+               git credentialsId: 'github', url: 'https://github.com/Ramsai09/hello-world.git'
+            }
+        }
+    stages {
+        stage('Test') {
+            steps {
+                sh mvn clean package'
+            }
+        }
+    }
+    post {
+        always {
+            junit 'build/reports/**/*.xml'
+        }
+    }
+}
